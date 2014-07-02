@@ -36,11 +36,16 @@ $(document).ready(function() {
 	
 		foreach($TCookie as $row) {
 		
-			?>
-			$('#breadCrumb ul').append("<li><a href=\"<?php echo $row[1] ?>\"><?php echo $row[0] ?></a></li>");
-			TCookie.push(["<?php echo $row[0] ?>", "<?php echo $row[1] ?>"]);
-			<?php
+			if(!empty($row[0])) {
+				
 			
+				?>
+				$('#breadCrumb ul').append("<li><a href=\"<?php echo $row[1] ?>\"><?php echo $row[0] ?></a></li>");
+				TCookie.push(["<?php echo $row[0] ?>", "<?php echo $row[1] ?>"]);
+				<?php
+				
+				
+			}
 		}
 	
 	?>
