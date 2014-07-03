@@ -107,6 +107,14 @@
 				
 				$titre = $langs->trans('Supplier').' '.$object->name;
 			}
+			else if(strpos($referer, "projet/fiche.php")  ) {
+				dol_include_once('/projet/class/project.class.php');
+				
+				$object=new Project($db);
+				$object->fetch($id);
+				
+				$titre = $object->ref;
+			}
 			
 		}
 		
