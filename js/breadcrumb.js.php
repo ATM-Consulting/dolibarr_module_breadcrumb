@@ -17,13 +17,13 @@
 		$TCookie = array();
 	}
 	
-	if(count($TCookie)>10) {
+	if(count($TCookie)>20) {
 		
-		$TCookie = array_slice($TCookie, count($TCookie) - 10 );
+		$TCookie = array_slice($TCookie, count($TCookie) - 20 );
 		
 	}
 	
-	$titre = '';
+	$titre = '';$full='';
 	$referer = $_SERVER['HTTP_REFERER'];
 		
 	if(!empty($referer)) {
@@ -38,7 +38,6 @@
 				$object->fetch($id);
 				
 				$titre = $object->ref;
-				
 			}
 			else if(strpos($referer, "facture.php")) {
 				dol_include_once('/compta/facture/class/facture.class.php');
@@ -115,6 +114,21 @@
 				
 				$titre = $object->ref;
 			}
+			else if(strpos($referer, "product/fiche.php")  ) {
+				dol_include_once('/product/class/product.class.php');
+				
+				$object=new Product($db);
+				$object->fetch($id);
+				
+				$titre = $object->ref;
+			}
+
+
+			if(!empty($object) && method_exists($object, 'getNomUrl')) {
+				//$full = $object->getNomUrl(1);
+				
+				$titre = img_object('', $object->element).$titre;
+			}
 			
 		}
 		
@@ -130,6 +144,7 @@ $(document).ready(function() {
 
 	var TCookie = new Array;
 	var titre = "<?php echo addslashes($titre) ?>";
+	var fullurl = "<?php echo addslashes($full) ?>";
 
 	$('#id-container').before("<div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div>");
 	$('#breadCrumb ul').append("<li><a href=\"<?php echo dol_buildpath('/',1) ?>\">Home</a></li>");
@@ -140,10 +155,12 @@ $(document).ready(function() {
 		
 			if(!empty($row[0])) {
 				
+				if(!empty($row[2])) $url = $row[2];
+				else $url = "<a href=\"".$row[1]."\">".$row[0]."</a>";
 			
 				?>
-				$('#breadCrumb ul').append("<li><a href=\"<?php echo $row[1] ?>\"><?php echo $row[0] ?></a></li>");
-				TCookie.push(["<?php echo $row[0] ?>", "<?php echo $row[1] ?>"]);
+				$('#breadCrumb ul').append("<li><?php echo addslashes($url) ?></li>");
+				TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo $row[1] ?>", "<?php echo addslashes($row[2]) ?>"]);
 				<?php
 				
 				
@@ -164,7 +181,7 @@ $(document).ready(function() {
 			};
 		}
 		
-		TCookie.push([titre, url]);
+		TCookie.push([titre, url, fullurl]);
 		$.cookie("breadcrumb",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
 		
 	} 

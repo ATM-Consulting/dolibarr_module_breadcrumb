@@ -6,3 +6,5 @@
 	else $dir = '../../';
 
 	include($dir."main.inc.php");
+
+	dol_include_once('/core/lib/functions.lib.php');
