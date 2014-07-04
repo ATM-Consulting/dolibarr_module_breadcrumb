@@ -107,3 +107,9 @@
 	width: 13px;
 	height: 20px;
 }
+
+.breadCrumb ul li img {
+
+	vertical-align: middle;
+
+}
