@@ -74,7 +74,7 @@
 				$object=new Contact($db);
 				$object->fetch($id);
 				
-				$titre = $langs->trans('Contact').' '.$object->firstname.' '.$object->lastname;
+				$titre =$object->firstname.' '.$object->lastname;
 				
 			}
 			
@@ -93,7 +93,7 @@
 				$object=new Societe($db);
 				$object->fetch($id);
 				
-				$titre = $langs->trans('Customer').' '.$object->name;
+				$titre = $object->name;
 			}
 			
 			else if(strpos($referer, "fourn/fiche.php")  ) {
@@ -127,7 +127,12 @@
 			if(!empty($object) && method_exists($object, 'getNomUrl')) {
 				//$full = $object->getNomUrl(1);
 				
-				$titre = img_object('', $object->element).$titre;
+				$type_element = $object->element;
+				if($type_element=='societe')$type_element='company';
+				elseif($type_element=='facture')$type_element='bill';
+				
+				
+				$titre = img_object('', $type_element).$titre;
 			}
 			
 		}
@@ -169,7 +174,7 @@ $(document).ready(function() {
 	
 	?>
 
-	$('#breadCrumb').jBreadCrumb({previewWidth : 50});
+	$('#breadCrumb').jBreadCrumb({previewWidth : 50, timeInitialCollapse : 0, minimumCompressionElements:50});
 	
 	//if(titre=="") titre = document.title.substr(len_to_remove);
 	var url = document.location.href;
