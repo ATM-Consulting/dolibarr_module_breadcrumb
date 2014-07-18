@@ -152,9 +152,10 @@ $(document).ready(function() {
 	var fullurl = "<?php echo addslashes($full) ?>";
 
 	$container = $('#id-container');
-	if(!$container) $container = $('body').find('div');
-
-	$('#id-container').before("<div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div>");
+	if($container.length == 0) {
+		$container = $('body').first('div');
+	}
+	$container.before("<div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div>");
 	$('#breadCrumb ul').append("<li><a href=\"<?php echo dol_buildpath('/',1) ?>\">Home</a></li>");
 
 	<?php
