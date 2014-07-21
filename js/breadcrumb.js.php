@@ -5,12 +5,14 @@
 	require('../config.php');
 	
 	$appli='Dolibarr';
-    if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
+	if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
 	
 	$len_to_remove = strlen($appli) + 3;
 	
-	if(isset($_COOKIE['breadcrumb'])) {
-		$TCookie = json_decode( $_COOKIE['breadcrumb'] );	
+	$cookiename = 'breadcrumb'.strtr(DOL_VERSION,array('.'=>''));
+
+	if(isset($_COOKIE[$cookiename])) {
+		$TCookie = json_decode( $_COOKIE[$cookiename] );	
 	}
 	
 	if(empty($TCookie)){
@@ -184,14 +186,14 @@ $(document).ready(function() {
 	var url = document.location.href;
 	
 	if(titre!="") {
-		for(x in TCookie)  {
+		for(x in TCookie) {
 			if(TCookie[x][1]==url || TCookie[x][2]==titre) { 
 				delete TCookie[x];	
 			};
 		}
 		
 		TCookie.push([titre, url, fullurl]);
-		$.cookie("breadcrumb",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
+		$.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
 		
 	} 
 	
