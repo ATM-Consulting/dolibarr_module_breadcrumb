@@ -153,11 +153,10 @@ $(document).ready(function() {
 	var titre = "<?php echo addslashes($titre) ?>";
 	var fullurl = "<?php echo addslashes($full) ?>";
 
-	$container = $('#id-container');
-	if($container.length == 0) {
-		$container = $('body').first('div');
-	}
-	$container.before("<div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div>");
+	$container = $('div.fiche'); 
+	
+	
+	$container.before("<div style=\"clear:both;\"></div><div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div><div style=\"clear:both;\"></div>");
 	$('#breadCrumb ul').append("<li><a href=\"<?php echo dol_buildpath('/',1) ?>\">Home</a></li>");
 
 	<?php

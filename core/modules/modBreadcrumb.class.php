@@ -51,7 +51,7 @@ class modBreadcrumb extends DolibarrModules
 
         // Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
         // It is used to group modules in module setup page
-        $this->family = "ATM";
+        $this->family = "technic";
         // Module label (no space allowed)
         // used if translation string 'ModuleXXXName' not found
         // (where XXX is value of numeric property 'numero' of module)
@@ -67,13 +67,13 @@ class modBreadcrumb extends DolibarrModules
         $this->const_name = 'MAIN_MODULE_' . strtoupper($this->name);
         // Where to store the module in setup page
         // (0=common,1=interface,2=others,3=very specific)
-        $this->special = 0;
+        $this->special = 2;
         // Name of image file used for this module.
         // If file is in theme/yourtheme/img directory under name object_pictovalue.png
         // use this->picto='pictovalue'
         // If file is in module/img directory under name object_pictovalue.png
         // use this->picto='pictovalue@module'
-        $this->picto = 'breadcrumb@breadcrumb'; // mypicto@breadcrumb
+        $this->picto = 'breadcrumb.png@breadcrumb'; // mypicto@breadcrumb
         // Defined all module parts (triggers, login, substitutions, menus, css, etc...)
         // for default path (eg: /breadcrumb/core/xxxxx) (0=disable, 1=enable)
         // for specific path of parts (eg: /breadcrumb/core/modules/barcode)
