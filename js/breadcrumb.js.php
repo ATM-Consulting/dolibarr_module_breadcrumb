@@ -154,7 +154,9 @@ $(document).ready(function() {
 	var fullurl = "<?php echo addslashes($full) ?>";
 
 	$container = $('div.fiche'); 
-	
+	if($container.length == 0) {
+          $container = $('body').first('div');
+    }
 	
 	$container.before("<div style=\"clear:both;\"></div><div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div><div style=\"clear:both;\"></div>");
 	$('#breadCrumb ul').append("<li><a href=\"<?php echo dol_buildpath('/',1) ?>\">Home</a></li>");
