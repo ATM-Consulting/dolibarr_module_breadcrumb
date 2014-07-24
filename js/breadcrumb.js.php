@@ -9,7 +9,7 @@
 	
 	$len_to_remove = strlen($appli) + 3;
 	
-	$cookiename = 'breadcrumb'.strtr(DOL_VERSION,array('.'=>''));
+	$cookiename = 'breadcrumb'.md5( dol_buildpath('/') );
 
 	if(isset($_COOKIE[$cookiename])) {
 		$TCookie = json_decode( $_COOKIE[$cookiename] );	
