@@ -7,6 +7,11 @@
 	$appli='Dolibarr';
 	if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
 	
+	
+	if (!empty($conf->global->BREADCRUMB_NB_ELEMENT)) $nb_element_to_show=$conf->global->BREADCRUMB_NB_ELEMENT;
+	else $nb_element_to_show = 10;
+	
+	
 	$len_to_remove = strlen($appli) + 3;
 	
 	$cookiename = 'breadcrumb'.md5( dol_buildpath('/') );
@@ -19,9 +24,9 @@
 		$TCookie = array();
 	}
 	
-	if(count($TCookie)>20) {
+	if(count($TCookie)>$nb_element_to_show) {
 		
-		$TCookie = array_slice($TCookie, count($TCookie) - 20 );
+		$TCookie = array_slice($TCookie, count($TCookie) - $nb_element_to_show );
 		
 	}
 	
