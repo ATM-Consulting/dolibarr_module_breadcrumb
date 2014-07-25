@@ -61,7 +61,7 @@ class modBreadcrumb extends DolibarrModules
         // (where XXX is value of numeric property 'numero' of module)
         $this->description = "Module de fil d'ariane";
         // Possible values for version are: 'development', 'experimental' or version
-        $this->version = '1.0.1';
+        $this->version = '1.0.2';
         // Key used in llx_const table to save module status enabled/disabled
         // (where MYMODULE is value of property name of module in uppercase)
         $this->const_name = 'MAIN_MODULE_' . strtoupper($this->name);
@@ -92,7 +92,7 @@ class modBreadcrumb extends DolibarrModules
 
         // Config pages. Put here list of php pages
         // stored into breadcrumb/admin directory, used to setup module.
-        $this->config_page_url = array("breadcrumb_setup.php@breadcrumb");
+        $this->config_page_url = false;
 
         // Dependencies
         // List of modules id that must be enabled if this module is enabled
