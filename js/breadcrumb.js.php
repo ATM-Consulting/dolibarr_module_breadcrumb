@@ -5,24 +5,28 @@
 	require('../config.php');
 	
 	$appli='Dolibarr';
-    if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
+	if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
+	
+	
+	if (!empty($conf->global->BREADCRUMB_NB_ELEMENT)) $nb_element_to_show=$conf->global->BREADCRUMB_NB_ELEMENT;
+	else $nb_element_to_show = 10;
+	
 	
 	$len_to_remove = strlen($appli) + 3;
 	
-	if(isset($_COOKIE['breadcrumb'])) {
-		$TCookie = json_decode( $_COOKIE['breadcrumb'] );	
+	$cookiename = 'breadcrumb'.md5( dol_buildpath('/') );
+
+	if(isset($_COOKIE[$cookiename])) {
+		$TCookie = json_decode( $_COOKIE[$cookiename] );	
 	}
 	
 	if(empty($TCookie)){
 		$TCookie = array();
 	}
 
-	$nb_max = $conf->global->BREADCRUMB_MAX_ELEMENT;
-	if(empty($nb_max)) $nb_max  = 10;
-	
-	if(count($TCookie)>$nb_max) {
+	if(count($TCookie)>$nb_element_to_show) {
 		
-		$TCookie = array_slice($TCookie, count($TCookie) - $nb_max );
+		$TCookie = array_slice($TCookie, count($TCookie) - $nb_element_to_show );
 		
 	}
 	
@@ -154,7 +158,12 @@ $(document).ready(function() {
 	var titre = "<?php echo addslashes($titre) ?>";
 	var fullurl = "<?php echo addslashes($full) ?>";
 
-	$('#id-container').before("<div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div>");
+	$container = $('div.fiche').first(); 
+	if($container.length == 0) {
+          $container = $('body').first('div');
+    	}
+	
+	$container.before("<div style=\"clear:both;\"></div><div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div><div style=\"clear:both;\"></div>");
 	$('#breadCrumb ul').append("<li><a href=\"<?php echo dol_buildpath('/',1) ?>\">Home</a></li>");
 
 	<?php
@@ -183,14 +192,14 @@ $(document).ready(function() {
 	var url = document.location.href;
 	
 	if(titre!="") {
-		for(x in TCookie)  {
+		for(x in TCookie) {
 			if(TCookie[x][1]==url || TCookie[x][2]==titre) { 
 				delete TCookie[x];	
 			};
 		}
 		
 		TCookie.push([titre, url, fullurl]);
-		$.cookie("breadcrumb",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
+		$.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
 		
 	} 
 	

@@ -51,7 +51,7 @@ class modBreadcrumb extends DolibarrModules
 
         // Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
         // It is used to group modules in module setup page
-        $this->family = "ATM";
+        $this->family = "technic";
         // Module label (no space allowed)
         // used if translation string 'ModuleXXXName' not found
         // (where XXX is value of numeric property 'numero' of module)
@@ -59,28 +59,28 @@ class modBreadcrumb extends DolibarrModules
         // Module description
         // used if translation string 'ModuleXXXDesc' not found
         // (where XXX is value of numeric property 'numero' of module)
-        $this->description = "Description of module breadcrumb";
+        $this->description = "Module de fil d'ariane";
         // Possible values for version are: 'development', 'experimental' or version
-        $this->version = '0.1';
+        $this->version = '1.0.2';
         // Key used in llx_const table to save module status enabled/disabled
         // (where MYMODULE is value of property name of module in uppercase)
         $this->const_name = 'MAIN_MODULE_' . strtoupper($this->name);
         // Where to store the module in setup page
         // (0=common,1=interface,2=others,3=very specific)
-        $this->special = 0;
+        $this->special = 2;
         // Name of image file used for this module.
         // If file is in theme/yourtheme/img directory under name object_pictovalue.png
         // use this->picto='pictovalue'
         // If file is in module/img directory under name object_pictovalue.png
         // use this->picto='pictovalue@module'
-        $this->picto = 'breadcrumb@breadcrumb'; // mypicto@breadcrumb
+        $this->picto = 'breadcrumb.png@breadcrumb'; // mypicto@breadcrumb
         // Defined all module parts (triggers, login, substitutions, menus, css, etc...)
         // for default path (eg: /breadcrumb/core/xxxxx) (0=disable, 1=enable)
         // for specific path of parts (eg: /breadcrumb/core/modules/barcode)
         // for specific css file (eg: /breadcrumb/css/breadcrumb.css.php)
         $this->module_parts = array(
 		
-			'js'=>array('/breadcrumb/js/breadcrumb.js.php','/breadcrumb/js/jquery.cookie.js','breadcrumb/js/jquery.jBreadCrumb.js')
+			'js'=>array('/breadcrumb/js/breadcrumb.js.php','/breadcrumb/js/jquery.cookie.js','/breadcrumb/js/jquery.jBreadCrumb.js')
 			,'css'=>array('/breadcrumb/css/BreadCrumb.css')
 			,'hooks' => array('productcard','ordercard','propalcard','invoicecard','expeditioncard','ordersuppliercard','invoicesuppliercard','receptioncard')
            
@@ -92,7 +92,7 @@ class modBreadcrumb extends DolibarrModules
 
         // Config pages. Put here list of php pages
         // stored into breadcrumb/admin directory, used to setup module.
-        $this->config_page_url = array("breadcrumb_setup.php@breadcrumb");
+        $this->config_page_url = false;
 
         // Dependencies
         // List of modules id that must be enabled if this module is enabled
