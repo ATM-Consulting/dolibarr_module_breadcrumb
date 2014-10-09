@@ -16,10 +16,13 @@
 	if(empty($TCookie)){
 		$TCookie = array();
 	}
+
+	$nb_max = $conf->global->BREADCRUMB_MAX_ELEMENT;
+	if(empty($nb_max)) $nb_max  = 10;
 	
-	if(count($TCookie)>20) {
+	if(count($TCookie)>$nb_max) {
 		
-		$TCookie = array_slice($TCookie, count($TCookie) - 20 );
+		$TCookie = array_slice($TCookie, count($TCookie) - $nb_max );
 		
 	}
 	
