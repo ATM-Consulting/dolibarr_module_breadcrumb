@@ -1,12 +1,11 @@
 <?php
 
-	if(!empty($_POST)) exit; // no arianne on submit form
-
+	if(!empty($_POST)) exit; // no breadcrumb on submit form
+  
 	require('../config.php');
 	
 	$appli='Dolibarr';
 	if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
-	
 	
 	if (!empty($conf->global->BREADCRUMB_NB_ELEMENT)) $nb_element_to_show=$conf->global->BREADCRUMB_NB_ELEMENT;
 	else $nb_element_to_show = 10;
@@ -38,7 +37,7 @@
 		$id = _get_id_from_url($referer);
 		
 		if($id>0) {
-			if(strpos($referer, "propal.php")) {
+			if(strpos($referer, 'propal.php')) {
 				dol_include_once('/comm/propal/class/propal.class.php');
 				
 				$object=new Propal($db);
@@ -46,7 +45,7 @@
 				
 				$titre = $object->ref;
 			}
-			else if(strpos($referer, "facture.php")) {
+			else if(strpos($referer, 'facture.php')) {
 				dol_include_once('/compta/facture/class/facture.class.php');
 				
 				$object=new Facture($db);
@@ -56,7 +55,7 @@
 				
 			}
 
-			else if(strpos($referer, "/fourn/commande/fiche.php")) {
+			else if(strpos($referer, '/fourn/commande/fiche.php') || strpos($referer, '/fourn/commande/card.php')) {
 				dol_include_once('/fourn/class/fournisseur.commande.class.php');
 				
 				$object=new CommandeFournisseur($db);
@@ -66,7 +65,7 @@
 				
 			}
 
-			else if(strpos($referer, "commande/fiche.php")) {
+			else if(strpos($referer, 'commande/fiche.php') || strpos($referer, 'commande/card.php')) {
 				dol_include_once('/commande/class/commande.class.php');
 				
 				$object=new Commande($db);
@@ -75,7 +74,7 @@
 				$titre = $object->ref;
 				
 			}
-			else if(strpos($referer, "contact/fiche.php")) {
+			else if(strpos($referer, 'contact/fiche.php') || strpos($referer, 'contact/card.php')) {
 				dol_include_once('/contact/class/contact.class.php');
 				
 				$object=new Contact($db);
@@ -94,7 +93,7 @@
 				$titre = $object->name;
 			}
 			
-			else if(strpos($referer, "comm/fiche.php")  ) {
+			else if(strpos($referer, 'comm/fiche.php') || strpos($referer, 'comm/card.php') ) {
 				dol_include_once('/societe/class/societe.class.php');
 				
 				$object=new Societe($db);
@@ -113,7 +112,7 @@
 				
 				$titre = $langs->trans('Supplier').' '.$object->name;
 			}
-			else if(strpos($referer, "projet/fiche.php")  ) {
+			else if(strpos($referer, 'projet/fiche.php')  ) {
 				dol_include_once('/projet/class/project.class.php');
 				
 				$object=new Project($db);
@@ -121,7 +120,7 @@
 				
 				$titre = $object->ref;
 			}
-			else if(strpos($referer, "product/fiche.php")  ) {
+			else if(strpos($referer, 'product/fiche.php') || strpos($referer, 'product/card.php')   ) {
 				dol_include_once('/product/class/product.class.php');
 				
 				$object=new Product($db);
@@ -132,9 +131,8 @@
 
 
 			if(!empty($object) && method_exists($object, 'getNomUrl')) {
-				//$full = $object->getNomUrl(1);
-				
-				$type_element = $object->element;
+			
+            	$type_element = $object->element;
 				if($type_element=='societe')$type_element='company';
 				elseif($type_element=='facture')$type_element='bill';
 				
@@ -146,17 +144,27 @@
 		
 		
 	}
-	
+    
+    
+    if(!empty($conf->global->BREADCRUMB_ALLOW_UNKNOWM_ELEMENTS) && empty($titre)) {
+        ?>
+        var titre = document.title;
+        var fullurl = '';
+        <?php
+    }
+    elseif(!empty($titre)) {
+       ?>
+       var titre = "<?php echo addslashes($titre) ?>";
+       var fullurl = "";
+       <?php    
+    }
 	
 ?>
-
 var len_to_remove = <?php echo $len_to_remove ?>;
 
 $(document).ready(function() {
 
 	var TCookie = new Array;
-	var titre = "<?php echo addslashes($titre) ?>";
-	var fullurl = "<?php echo addslashes($full) ?>";
 
 	$container = $('div.fiche').first(); 
 	if($container.length == 0) {
