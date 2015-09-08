@@ -32,6 +32,10 @@
 	$titre = '';$full='';
 	$referer = $_SERVER['HTTP_REFERER'];
 		
+    ?>
+        var referer = "<?php echo $referer ?>";
+    <?php
+        
 	if(!empty($referer)) {
 	
 		$id = _get_id_from_url($referer);
@@ -102,7 +106,7 @@
 				$titre = $object->name;
 			}
 			
-			else if(strpos($referer, "fourn/fiche.php")  ) {
+			else if(strpos($referer, "fourn/fiche.php") || strpos($referer, "fourn/card.php")  ) {
 				dol_include_once('/societe/class/societe.class.php');
 				
 				$object=new Societe($db);
@@ -112,7 +116,7 @@
 				
 				$titre = $langs->trans('Supplier').' '.$object->name;
 			}
-			else if(strpos($referer, 'projet/fiche.php')  ) {
+			else if(strpos($referer, 'projet/fiche.php') || strpos($referer, 'projet/card.php') ) {
 				dol_include_once('/projet/class/project.class.php');
 				
 				$object=new Project($db);
