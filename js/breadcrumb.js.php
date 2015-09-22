@@ -55,6 +55,13 @@
        var fullurl = "";
        <?php    
     }
+	else
+	{
+		?>
+		var titre = "";
+		var fullurl = "";
+		<?php
+	}
 	
 ?>
 var len_to_remove = <?php echo $len_to_remove ?>;
@@ -78,11 +85,11 @@ $(document).ready(function() {
 			if(!empty($row[0])) {
 				
 				if(!empty($row[2])) $url = $row[2];
-				else $url = "<a href=\"".$row[1]."\">".$row[0]."</a>";
+				else $url = "<a href=\"".addslashes($row[1])."\">".$row[0]."</a>";
 			
 				?>
 				$('#breadCrumb ul').append("<li><?php echo addslashes($url) ?></li>");
-				TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo $row[1] ?>", "<?php echo addslashes($row[2]) ?>"]);
+				TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo addslashes($row[1]) ?>", "<?php echo addslashes($row[2]) ?>"]);
 				<?php
 				
 				
@@ -111,5 +118,3 @@ $(document).ready(function() {
 	
 })
 <?php
-
-
