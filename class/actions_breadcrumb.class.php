@@ -36,43 +36,47 @@ class ActionsBreadcrumb
                 $TCookie = array();
             }
             
-            $titre = getTitreFromUrl($_SERVER['REQUEST_URI']);
-            
-            ?><script type="text/javascript">
-                var titre = "<?php echo addslashes($titre) ?>";
-                var TCookie = new Array;
-            
-                var url = document.location.href;
-                var fullurl='';
-        
-                <?php
+            if(!BCactionInUrl($_SERVER['REQUEST_URI'])) {
+                 $titre = getTitreFromUrl($_SERVER['REQUEST_URI']);
                 
-                    foreach($TCookie as $row) {
+                ?><script type="text/javascript">
+                    var titre = "<?php echo addslashes($titre) ?>";
+                    var TCookie = new Array;
+                
+                    var url = document.location.href;
+                    var fullurl='';
+            
+                    <?php
                     
-                        if(!empty($row[0])) {
-                            ?>
-                            TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo $row[1] ?>", "<?php echo addslashes($row[2]) ?>"]);
-                            <?php
+                        foreach($TCookie as $row) {
+                        
+                            if(!empty($row[0])) {
+                                ?>
+                                TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo $row[1] ?>", "<?php echo addslashes($row[2]) ?>"]);
+                                <?php
+                            }
+    
                         }
-
-                    }
-                
-                ?>
-        
-                if(titre!="") {
-                    for(x in TCookie) {
-                        if(TCookie[x][1]==url || TCookie[x][2]==titre) { 
-                            delete TCookie[x];  
-                        };
-                    }
                     
-                    TCookie.push([titre, url, fullurl]);
-                    $.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
-                    
-                } 
+                    ?>
             
-            </script>
-            <?php
+                    if(titre!="") {
+                        for(x in TCookie) {
+                            if(TCookie[x][1]==url || TCookie[x][2]==titre) { 
+                                delete TCookie[x];  
+                            };
+                        }
+                        
+                        TCookie.push([titre, url, fullurl]);
+                        $.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
+                        
+                    } 
+                
+                </script>
+                <?php               
+            }
+            
+
             
         }
         

@@ -122,6 +122,17 @@ global $db, $langs;
 
 }
 
+function BCactionInUrl($url) {
+    
+    if(strpos($url,'action=')!==false && strpos($url,'action=list')===false ) {
+        return true;
+    }
+    else{
+        return false;
+    }
+    
+}
+
 function _get_id_from_url($url) {
     
     $pos = strpos($url, 'id=');

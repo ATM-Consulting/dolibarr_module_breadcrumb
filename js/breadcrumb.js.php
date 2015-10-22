@@ -38,31 +38,33 @@
     <?php
         
 	if(!empty($referer)) {
-	
-		$titre = getTitreFromUrl($referer);
+	    $titre = getTitreFromUrl($referer);
 	}
     
+    if(!BCactionInUrl($referer)) {
+        if(!empty($conf->global->BREADCRUMB_ALLOW_UNKNOWM_ELEMENTS) && empty($titre)) {
+            ?>
+            var titre = document.title;
+            var fullurl = '';
+            <?php
+        }
+        elseif(!empty($titre)) {
+           ?>
+           var titre = "<?php echo addslashes($titre) ?>";
+           var fullurl = "";
+           <?php    
+        }
+        else
+        {
+            ?>
+            var titre = "";
+            var fullurl = "";
+            <?php
+        }
+        
+        
+    }
     
-    if(!empty($conf->global->BREADCRUMB_ALLOW_UNKNOWM_ELEMENTS) && empty($titre)) {
-        ?>
-        var titre = document.title;
-        var fullurl = '';
-        <?php
-    }
-    elseif(!empty($titre)) {
-       ?>
-       var titre = "<?php echo addslashes($titre) ?>";
-       var fullurl = "";
-       <?php    
-    }
-	else
-	{
-		?>
-		var titre = "";
-		var fullurl = "";
-		<?php
-	}
-	
 ?>
 var len_to_remove = <?php echo $len_to_remove ?>;
 
