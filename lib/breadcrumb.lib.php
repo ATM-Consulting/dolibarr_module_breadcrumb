@@ -9,7 +9,7 @@ function getCookieName() {
 }    
     
 function getTitreFromUrl($referer) {
-global $db;
+global $db, $langs;
         $id = _get_id_from_url($referer);
         
         if($id>0) {
