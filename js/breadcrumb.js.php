@@ -72,7 +72,7 @@ $(document).ready(function() {
 
 	var TCookie = new Array;
 
-	$container = $('div.fiche').first(); 
+	$container = $('div#id-container').first(); 
 	if($container.length == 0) {
           $container = $('body').first('div');
     }
