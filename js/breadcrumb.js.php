@@ -40,26 +40,23 @@
 	if(!empty($referer)) {
 	    $titre = getTitreFromUrl($referer);
 	}
-    
+    ?>
+    var titre = "";
+    var fullurl = "";
+    <?php
+            
     if(!BCactionInUrl($referer)) {
         if(!empty($conf->global->BREADCRUMB_ALLOW_UNKNOWM_ELEMENTS) && empty($titre)) {
             ?>
-            var titre = document.title;
-            var fullurl = '';
+            titre = document.title;
+            fullurl = '';
             <?php
         }
         elseif(!empty($titre)) {
            ?>
-           var titre = "<?php echo addslashes($titre) ?>";
-           var fullurl = "";
+           titre = "<?php echo addslashes($titre) ?>";
+           fullurl = "";
            <?php    
-        }
-        else
-        {
-            ?>
-            var titre = "";
-            var fullurl = "";
-            <?php
         }
         
         
