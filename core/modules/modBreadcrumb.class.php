@@ -61,7 +61,7 @@ class modBreadcrumb extends DolibarrModules
         // (where XXX is value of numeric property 'numero' of module)
         $this->description = "Module de fil d'ariane";
         // Possible values for version are: 'development', 'experimental' or version
-        $this->version = '1.2.1';
+        $this->version = '1.2.2';
         // Key used in llx_const table to save module status enabled/disabled
         // (where MYMODULE is value of property name of module in uppercase)
         $this->const_name = 'MAIN_MODULE_' . strtoupper($this->name);
@@ -79,11 +79,11 @@ class modBreadcrumb extends DolibarrModules
         // for specific path of parts (eg: /breadcrumb/core/modules/barcode)
         // for specific css file (eg: /breadcrumb/css/breadcrumb.css.php)
         $this->module_parts = array(
-		
+
 			'js'=>array('/breadcrumb/js/breadcrumb.js.php','/breadcrumb/js/jquery.cookie.js','/breadcrumb/js/jquery.jBreadCrumb.js')
 			,'css'=>array('/breadcrumb/css/BreadCrumb.css')
 			,'hooks' => array('globalcard')
-           
+
         );
 
         // Data directories to create when module is enabled.
