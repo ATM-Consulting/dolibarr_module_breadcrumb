@@ -10,19 +10,22 @@ class ActionsBreadcrumb
 
     function formObjectOptions($parameters, &$object, &$action, $hookmanager)
     {
-
 	  	$this->updateCookie($object);
 		return 0;
 	}
 
+
+	/**
+	 *
+	 * @param unknown $object
+	 * @return boolean
+	 */
 	private function updateCookie(&$object) {
 		if(!empty($_POST)) return false; // rien si post
 
-		$cssprint=GETPOST('optioncss');
-
 		global $db;
 
-        if(!defined('BREADCRUMB_ALREADY_IN_PAGE') && empty($cssprint)) {
+        if(!defined('BREADCRUMB_ALREADY_IN_PAGE')) {
 
             define('BREADCRUMB_ALREADY_IN_PAGE', 1);
 
