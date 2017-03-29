@@ -25,7 +25,13 @@
 
 /* Breadcrumb Styles
  ---------------------------------------------------------------------*/
-
+.breadCrumbHolder.md{
+	position:relative;
+	top:-12px;
+}
+.breadCrumbHolder.md .breadCrumb{
+	padding-left:15px;
+}
 .breadCrumb
 {
 	margin: 0;

@@ -74,12 +74,20 @@ $(document).ready(function() {
 
 	var TCookie = new Array;
 
+<?php if($conf->theme == 'md') { ?>
+	$container = $('div#id-right').children().first();
+<?php } else { ?>
 	$container = $('div#id-container').first();
+<?php } ?>
 	if($container.length == 0) {
           $container = $('body').first('div');
     }
 
 	$container.before("<div style=\"clear:both;\"></div><div class=\"breadCrumbHolder module\"><div id=\"breadCrumb\" class=\"breadCrumb module\"><ul></ul></div></div><div style=\"clear:both;\"></div>");
+<?php if($conf->theme == 'md') { ?>
+	$('.breadCrumbHolder').addClass('md');
+<?php } ?>
+
 	$('#breadCrumb ul').append("<li><a href=\"<?php echo dol_buildpath('/',1) ?>\">Home</a></li>");
 
 	<?php
