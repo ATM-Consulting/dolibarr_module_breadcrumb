@@ -31,7 +31,7 @@ global $db, $langs;
         		$titre = $object->ref;
         	}
         	
-        	else if(strpos($referer, '/compta/facture.php')) {
+        	else if(strpos($referer, '/compta/facture.php') || strpos($referer, '/compta/facture/card.php')) {
         		dol_include_once('/compta/facture/class/facture.class.php');
         		
         		$object=new Facture($db);
@@ -80,7 +80,7 @@ global $db, $langs;
                 
             }
             
-            else if(strpos($referer, "societe/soc.php")  ) {
+            else if(strpos($referer, "societe/soc.php") || strpos($referer, 'societe/card.php')) {
                 dol_include_once('/societe/class/societe.class.php');
                 
                 $object=new Societe($db);
