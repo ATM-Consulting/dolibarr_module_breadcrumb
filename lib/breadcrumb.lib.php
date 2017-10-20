@@ -13,23 +13,43 @@ global $db, $langs;
         $id = _get_id_from_url($referer);
         
         if($id>0) {
-            if(strpos($referer, 'propal.php')) {
-                dol_include_once('/comm/propal/class/propal.class.php');
-                
-                $object=new Propal($db);
-                $object->fetch($id);
-                
-                $titre = $object->ref;
-            }
-            else if(strpos($referer, 'facture.php')) {
-                dol_include_once('/compta/facture/class/facture.class.php');
-                
-                $object=new Facture($db);
-                $object->fetch($id);
-                
-                $titre = $object->ref;
-                
-            }
+        	if(strpos($referer, 'propal.php') || strpos($referer, 'propal/card.php')) {
+        		dol_include_once('/comm/propal/class/propal.class.php');
+        		
+        		$object=new Propal($db);
+        		$object->fetch($id);
+        		
+        		$titre = $object->ref;
+        	}
+        	
+        	elseif(strpos($referer, '/supplier_proposal/card.php')) {
+        		dol_include_once('/supplier_proposal/class/supplier_proposal.class.php');
+        		
+        		$object=new SupplierProposal($db);
+        		$object->fetch($id);
+        		
+        		$titre = $object->ref;
+        	}
+        	
+        	else if(strpos($referer, '/compta/facture.php') || strpos($referer, '/compta/facture/card.php')) {
+        		dol_include_once('/compta/facture/class/facture.class.php');
+        		
+        		$object=new Facture($db);
+        		$object->fetch($id);
+        		
+        		$titre = $object->ref;
+        		
+        	}
+        	
+        	else if(strpos($referer, '/fourn/facture/card.php')) {
+        		dol_include_once('/fourn/class/fournisseur.facture.class.php');
+        		
+        		$object=new FactureFournisseur($db);
+        		$object->fetch($id);
+        		
+        		$titre = $object->ref;
+        		
+        	}
 
             else if(strpos($referer, '/fourn/commande/fiche.php') || strpos($referer, '/fourn/commande/card.php')) {
                 dol_include_once('/fourn/class/fournisseur.commande.class.php');
@@ -60,7 +80,7 @@ global $db, $langs;
                 
             }
             
-            else if(strpos($referer, "societe/soc.php")  ) {
+            else if(strpos($referer, "societe/soc.php") || strpos($referer, 'societe/card.php')) {
                 dol_include_once('/societe/class/societe.class.php');
                 
                 $object=new Societe($db);
@@ -107,13 +127,14 @@ global $db, $langs;
 
 
             if(!empty($object) && method_exists($object, 'getNomUrl')) {
-            
+            	
                 $type_element = $object->element;
                 if($type_element=='societe')$type_element='company';
-                elseif($type_element=='facture')$type_element='bill';
-                
+                elseif($type_element=='facture' || $type_element=='invoice_supplier')$type_element='bill';
+                elseif($type_element=='commande' || $type_element=='order_supplier')$type_element='order';
                 
                 $titre = img_object('', $type_element).$titre;
+                
             }
             
         }
