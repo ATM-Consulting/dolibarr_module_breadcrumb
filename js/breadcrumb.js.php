@@ -1,5 +1,7 @@
 <?php
 
+	header('Content-Type: application/javascript');
+
 	if(!empty($_POST)) exit; // no breadcrumb on submit form
 
 	require('../config.php');
