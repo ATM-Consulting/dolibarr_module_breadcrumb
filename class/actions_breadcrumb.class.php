@@ -40,14 +40,24 @@ class ActionsBreadcrumb
             if(empty($TCookie)){
                 $TCookie = array();
             }
-
+            
             if(!BCactionInUrl($_SERVER['REQUEST_URI'])) {
-                 $titre = getTitreFromUrl($_SERVER['REQUEST_URI']);
+                
+                 $linkName = '';
+                 $linkTooltip = '';
+                 $item = getBreadcrumbItemInfoFromUrl($_SERVER['REQUEST_URI']);
+                 if(!empty($item)){
+                     $linkName = $item['linkName'];
+                     
+                     if(!empty($item['linkTooltip'])){
+                         $linkTooltip = $item['linkTooltip'];
+                     }
+                 }
 
-                ?><script type="text/javascript">
-                    var titre = "<?php echo addslashes($titre) ?>";
+                ?><script type="text/javascript" >
+                    var titre = "<?php echo addslashes($linkName) ?>";
                     var TCookie = new Array;
-
+					var linktooltip = <?php echo json_encode(str_replace(array("\n", "\r"), '',  $linkTooltip) ) ?>;
                     var url = document.location.href;
                     var fullurl='';
 
@@ -55,9 +65,16 @@ class ActionsBreadcrumb
 
                         foreach($TCookie as $row) {
 
+                            $TToPush = array(
+                                json_encode($row[0]),
+                                json_encode($row[1]),
+                                json_encode($row[2]),
+                                json_encode(!empty($row[3])?$row[3]:'') // to prevent update error
+                            );
+                            
                             if(!empty($row[0])) {
                                 ?>
-                                TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo $row[1] ?>", "<?php echo addslashes($row[2]) ?>"]);
+                                TCookie.push([<?php echo implode(',', $TToPush); ?>]);
                                 <?php
                             }
 
@@ -72,7 +89,7 @@ class ActionsBreadcrumb
                             };
                         }
 
-                        TCookie.push([titre, url, fullurl]);
+                        TCookie.push([titre, url, fullurl, linktooltip]);
                         $.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
 
                     }

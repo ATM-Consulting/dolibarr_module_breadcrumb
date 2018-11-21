@@ -38,6 +38,7 @@
 	}
 
 	$titre = '';$full='';
+	$linkTooltip = '';
 
 
     ?>
@@ -45,11 +46,19 @@
     <?php
 
 	if(!empty($referer)) {
-	    $titre = getTitreFromUrl($referer);
+	    $item = getBreadcrumbItemInfoFromUrl($_SERVER['REQUEST_URI']);
+	    if(!empty($item)){
+	        $titre = $item['linkName'];
+	        
+	        if(!empty($item['linkTooltip'])){
+	            $linkTooltip = $item['linkTooltip'];
+	        }
+	    }
 	}
     ?>
     var titre = "";
     var fullurl = "";
+    var linktooltip = "";
     <?php
 
     if(!BCactionInUrl($referer)) {
@@ -57,12 +66,14 @@
             ?>
             titre = document.title;
             fullurl = '';
+            linktooltip = '';
             <?php
         }
         elseif(!empty($titre)) {
            ?>
            titre = "<?php echo addslashes($titre) ?>";
            fullurl = "";
+           linktooltip = <?php echo json_encode(str_replace(array("\n", "\r"), '',  $linkTooltip)); ?>;
            <?php
         }
 
@@ -98,12 +109,28 @@ $(document).ready(function() {
 
 			if(!empty($row[0])) {
 
-				if(!empty($row[2])) $url = $row[2];
-				else $url = "<a href=\"".addslashes($row[1])."\">".$row[0]."</a>";
+			    $toolTipAttr = '';
+			    if(!empty($row[3])){
+			        $toolTipAttr = ' class="breadcrumbTooltip" title="'.dol_escape_htmltag($row[3], 1).'" ';
+			    }
+			    else{
+			        $row[3] = '';
+			    }
+			    
+			    
+			    if(!empty($row[2])){
+			        $url = $row[2];
+			        if(!empty($row[3])){
+			            $url = '<span '.$toolTipAttr.' >'.$row[0].'</a>';
+			        }
+			    }
+			    else{
+			        $url = '<a '.$toolTipAttr.' href="'.addslashes($row[1]).'">'.$row[0].'</a>';
+			    }
 
 				?>
 				$('#breadCrumb ul').append("<li><?php echo addslashes($url) ?></li>");
-				TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo addslashes($row[1]) ?>", "<?php echo addslashes($row[2]) ?>"]);
+				TCookie.push([<?php echo json_encode($row[0]) ?>, <?php echo json_encode($row[1]) ?>, <?php echo json_encode($row[2]) ?>, <?php echo json_encode($row[3]) ?>]);
 				<?php
 
 
@@ -124,9 +151,23 @@ $(document).ready(function() {
 			};
 		}
 
-		TCookie.push([titre, url, fullurl]);
+		TCookie.push([titre, url, fullurl, linktooltip]);
 		$.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
 
+	}
+
+
+	var breadcrumbtooltip = $('.breadcrumbTooltip');
+	// add tooltip
+	if(!breadcrumbtooltip.data("tooltipset")){
+    	breadcrumbtooltip.tooltip({
+			show: { collision: "flipfit", effect:"toggle", delay:50 },
+			hide: { delay: 50 },
+			tooltipClass: "mytooltip",
+			content: function () {
+  				return $(this).prop("title");		/* To force to get title as is */
+			}
+		});
 	}
 
 
