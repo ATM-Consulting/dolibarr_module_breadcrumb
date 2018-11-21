@@ -159,16 +159,14 @@ $(document).ready(function() {
 
 	var breadcrumbtooltip = $('.breadcrumbTooltip');
 	// add tooltip
-	if(!breadcrumbtooltip.data("tooltipset")){
-    	breadcrumbtooltip.tooltip({
-			show: { collision: "flipfit", effect:"toggle", delay:50 },
-			hide: { delay: 50 },
-			tooltipClass: "mytooltip",
-			content: function () {
-  				return $(this).prop("title");		/* To force to get title as is */
-			}
-		});
-	}
+	breadcrumbtooltip.tooltip({
+		show: { collision: "flipfit", effect:"toggle", delay:50 },
+		hide: { delay: 50 },
+		tooltipClass: "mytooltip",
+		content: function () {
+			return $(this).prop("title");		/* To force to get title as is */
+		}
+	});
 
 
 })
