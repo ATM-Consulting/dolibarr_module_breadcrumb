@@ -167,9 +167,10 @@ function getBreadcrumbItemInfoFromUrl($referer) {
             $object->fetch($id);
             $return['linkName'] = $object->ref;
             $return['linkTooltip'] = getObjectThirdpartyForTooltip($object);
+            $imgElement = $object->picto;
         }
         elseif(strpos($referer, 'compta/sociales/card.php')) {
-            // ne fonctionne pas actuellement car manque un hook dans dolibarr  -> // $hookmanager->initHooks(array('globalcard'));
+            // ne fonctionne pas actuellement car manque un inithook dans dolibarr  -> // $hookmanager->initHooks(array('globalcard'));
             dol_include_once('compta/sociales/class/chargesociales.class.php');
             $object=new ChargeSociales($db);
             $object->fetch($id);
@@ -194,17 +195,22 @@ function getBreadcrumbItemInfoFromUrl($referer) {
             $object->fetch($id);
             $return['linkName'] = $object->ref;
         }
+        elseif(strpos($referer, 'product/stock/card.php')) {
+            // ne fonctionne pas actuellement car manque un hook dans dolibarr  -> // formObjectOptions : utiliser  addMoreActionsButtons ?
+            dol_include_once('product/stock/class/entrepot.class.php');
+            $object=new Entrepot($db);
+            $object->fetch($id);
+            $return['linkName'] = $object->ref;
+        }
         
         
         if(!empty($object) && method_exists($object, 'getNomUrl')) {
             
-            $type_element = $object->element;
+            $type_element = !empty($object->picto)?$object->picto:$object->element;
             if($type_element=='societe')$type_element='company';
             elseif($type_element=='facture' || $type_element=='invoice_supplier')$type_element='bill';
             elseif($type_element=='commande' || $type_element=='order_supplier')$type_element='order';
             elseif($type_element=='contrat')$type_element='contract';
-            elseif($type_element=='fichinter')$type_element='intervention';
-            elseif($type_element=='project_task')$type_element='projecttask';
             
             
             $return['linkName'] = img_object('', $type_element).(!empty($return['linkName'])?$return['linkName']:'');
