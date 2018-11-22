@@ -169,6 +169,32 @@ function getBreadcrumbItemInfoFromUrl($referer) {
             
             $return['linkName'] = $object->ref;
         }
+        else if(strpos($referer, 'contrat/card.php') ) {
+            dol_include_once('/contrat/class/contrat.class.php');
+            
+            $object=new Contrat($db);
+            $object->fetch($id);
+            
+            $return['linkName'] = $object->ref;
+            $return['linkTooltip'] = getObjectThirdpartyForTooltip($object);
+        }
+        else if(strpos($referer, 'compta/sociales/card.php')) {
+            // ne fonctionne pas actuellement car manque un hook dans dolibarr  -> // $hookmanager->initHooks(array('globalcard'));
+            dol_include_once('compta/sociales/class/chargesociales.class.php');
+            
+            $object=new ChargeSociales($db);
+            $object->fetch($id);
+            
+            $return['linkName'] = $object->lib;
+        }
+        else if(strpos($referer, 'compta/bank/card.php')) {
+            // ne fonctionne pas actuellement car manque un hook dans dolibarr  -> // $hookmanager->initHooks(array('globalcard'));
+            dol_include_once('compta/bank/class/bank.class.php');
+            
+            $object=new account($db);
+            $object->fetch($id);
+            $return['linkName'] = $object->ref;
+        }
         
         
         if(!empty($object) && method_exists($object, 'getNomUrl')) {
