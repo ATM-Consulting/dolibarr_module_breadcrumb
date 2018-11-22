@@ -127,30 +127,23 @@ function getBreadcrumbItemInfoFromUrl($referer) {
         
         else if(strpos($referer, "societe/soc.php") || strpos($referer, 'societe/card.php')) {
             dol_include_once('/societe/class/societe.class.php');
-            
             $object=new Societe($db);
             $object->fetch($id);
-            
             $return['linkName'] = $object->name;
         }
         
         else if(strpos($referer, 'comm/fiche.php') || strpos($referer, 'comm/card.php') ) {
             dol_include_once('/societe/class/societe.class.php');
-            
             $object=new Societe($db);
             $object->fetch($id);
-            
             $return['linkName'] = $object->name;
         }
         
         else if(strpos($referer, "fourn/fiche.php") || strpos($referer, "fourn/card.php")  ) {
             dol_include_once('/societe/class/societe.class.php');
-            
             $object=new Societe($db);
             $object->fetch($id);
-            
             $langs->load('suppliers');
-            
             $return['linkName'] = $langs->trans('Supplier').' '.$object->name;
         }
         else if(strpos($referer, 'projet/fiche.php') || strpos($referer, 'projet/card.php') ) {
@@ -158,7 +151,6 @@ function getBreadcrumbItemInfoFromUrl($referer) {
             
             $object=new Project($db);
             $object->fetch($id);
-            
             $return['linkName'] = $object->ref;
         }
         else if(strpos($referer, 'product/fiche.php') || strpos($referer, 'product/card.php')   ) {
@@ -166,32 +158,39 @@ function getBreadcrumbItemInfoFromUrl($referer) {
             
             $object=new Product($db);
             $object->fetch($id);
-            
             $return['linkName'] = $object->ref;
         }
-        else if(strpos($referer, 'contrat/card.php') ) {
+        elseif(strpos($referer, 'contrat/card.php') ) {
             dol_include_once('/contrat/class/contrat.class.php');
             
             $object=new Contrat($db);
             $object->fetch($id);
-            
             $return['linkName'] = $object->ref;
             $return['linkTooltip'] = getObjectThirdpartyForTooltip($object);
         }
-        else if(strpos($referer, 'compta/sociales/card.php')) {
+        elseif(strpos($referer, 'compta/sociales/card.php')) {
             // ne fonctionne pas actuellement car manque un hook dans dolibarr  -> // $hookmanager->initHooks(array('globalcard'));
             dol_include_once('compta/sociales/class/chargesociales.class.php');
-            
             $object=new ChargeSociales($db);
             $object->fetch($id);
-            
             $return['linkName'] = $object->lib;
         }
-        else if(strpos($referer, 'compta/bank/card.php')) {
-            // ne fonctionne pas actuellement car manque un hook dans dolibarr  -> // $hookmanager->initHooks(array('globalcard'));
+        elseif(strpos($referer, 'compta/bank/card.php')) {
             dol_include_once('compta/bank/class/bank.class.php');
-            
             $object=new account($db);
+            $object->fetch($id);
+            $return['linkName'] = $object->ref;
+        }
+        elseif(strpos($referer, 'fichinter/card.php')) {
+            dol_include_once('fichinter/class/fichinter.class.php');
+            $object=new Fichinter($db);
+            $object->fetch($id);
+            //$langs->load("interventions"); //$langs->trans('Intervention').' '.
+            $return['linkName'] = $object->ref;
+        }
+        elseif(strpos($referer, 'projet/tasks/task.php')) {
+            dol_include_once('projet/class/task.class.php');
+            $object=new Task($db);
             $object->fetch($id);
             $return['linkName'] = $object->ref;
         }
@@ -203,9 +202,13 @@ function getBreadcrumbItemInfoFromUrl($referer) {
             if($type_element=='societe')$type_element='company';
             elseif($type_element=='facture' || $type_element=='invoice_supplier')$type_element='bill';
             elseif($type_element=='commande' || $type_element=='order_supplier')$type_element='order';
+            elseif($type_element=='contrat')$type_element='contract';
+            elseif($type_element=='fichinter')$type_element='intervention';
+            elseif($type_element=='project_task')$type_element='projecttask';
+            
             
             $return['linkName'] = img_object('', $type_element).(!empty($return['linkName'])?$return['linkName']:'');
-            
+
             // get tooltip info from std getNomUrl
             $getNomUrl = getAttrFromDomElement($object->getNomUrl());
             if(!empty($getNomUrl) && !in_array($type_element, array('societe','company'))){
