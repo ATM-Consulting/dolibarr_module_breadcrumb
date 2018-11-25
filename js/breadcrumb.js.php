@@ -16,13 +16,14 @@
 	$appli='Dolibarr';
 	if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
 
-	if (!empty($conf->global->BREADCRUMB_NB_ELEMENT)) $nb_element_to_show=$conf->global->BREADCRUMB_NB_ELEMENT;
-	else $nb_element_to_show = 10;
+	
+	$nb_element_to_show = breadcrumbNbElementToShow();
 
     $cookiename = getCookieName();
 
 	$len_to_remove = strlen($appli) + 3;
 
+	// Prepare $TCookie
 	if(isset($_COOKIE[$cookiename])) {
 		$TCookie = json_decode( $_COOKIE[$cookiename] );
 	}
@@ -32,9 +33,21 @@
 	}
 
 	if(count($TCookie)>$nb_element_to_show) {
-
 		$TCookie = array_slice($TCookie, count($TCookie) - $nb_element_to_show );
-
+	}
+	
+	// Prepare $TSessionToolTip
+	// Tooltips are stored in session due to cookies size limit
+	if(isset($_SESSION[$cookiename])) {
+	    $TSessionToolTip =& $_SESSION[$cookiename];
+	}
+	
+	if(empty($TSessionToolTip)){
+	    $TSessionToolTip = array();
+	}
+	
+	if(count($TSessionToolTip)>$nb_element_to_show) {
+	    $TSessionToolTip = array_slice($TSessionToolTip, count($TSessionToolTip) - $nb_element_to_show );
 	}
 
 	$titre = '';$full='';
@@ -52,13 +65,13 @@
 	        
 	        if(!empty($item['linkTooltip'])){
 	            $linkTooltip = $item['linkTooltip'];
+	            $TSessionToolTip[$_SERVER['REQUEST_URI']] = $item['linkTooltip'];
 	        }
 	    }
 	}
     ?>
     var titre = "";
     var fullurl = "";
-    var linktooltip = "";
     <?php
 
     if(!BCactionInUrl($referer)) {
@@ -66,14 +79,12 @@
             ?>
             titre = document.title;
             fullurl = '';
-            linktooltip = '';
             <?php
         }
         elseif(!empty($titre)) {
            ?>
            titre = "<?php echo addslashes($titre) ?>";
            fullurl = "";
-           linktooltip = <?php echo json_encode(str_replace(array("\n", "\r"), '',  $linkTooltip)); ?>;
            <?php
         }
 
@@ -110,19 +121,13 @@ $(document).ready(function() {
 			if(!empty($row[0])) {
 
 			    $toolTipAttr = '';
-			    if(!empty($row[3])){
-			        $toolTipAttr = ' class="breadcrumbTooltip" title="'.dol_escape_htmltag($row[3], 1).'" ';
-			    }
-			    else{
-			        $row[3] = '';
+			    if(!empty($conf->global->BREADCRUMB_TOOLTIPS) && !empty($TSessionToolTip[$row[1]])){
+			        $toolTipAttr = ' class="breadcrumbTooltip" title="'.dol_escape_htmltag($TSessionToolTip[$row[1]], 1).'" ';
 			    }
 			    
 			    
 			    if(!empty($row[2])){
-			        $url = $row[2];
-			        if(!empty($row[3])){
-			            $url = '<span '.$toolTipAttr.' >'.$row[0].'</a>';
-			        }
+			        $url = '<span'.$toolTipAttr.' >'.$row[0].'</span>';
 			    }
 			    else{
 			        $url = '<a '.$toolTipAttr.' href="'.addslashes($row[1]).'">'.$row[0].'</a>';
@@ -130,9 +135,8 @@ $(document).ready(function() {
 
 				?>
 				$('#breadCrumb ul').append("<li><?php echo addslashes($url) ?></li>");
-				TCookie.push([<?php echo json_encode($row[0]) ?>, <?php echo json_encode($row[1]) ?>, <?php echo json_encode($row[2]) ?>, <?php echo json_encode($row[3]) ?>]);
+				TCookie.push([<?php echo json_encode($row[0]) ?>, <?php echo json_encode($row[1]) ?>, <?php echo json_encode($row[2]) ?>]);
 				<?php
-
 
 			}
 		}
@@ -151,7 +155,7 @@ $(document).ready(function() {
 			};
 		}
 
-		TCookie.push([titre, url, fullurl, linktooltip]);
+		TCookie.push([titre, url, fullurl]);
 		$.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
 
 	}

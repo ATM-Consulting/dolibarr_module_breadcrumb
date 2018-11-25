@@ -230,6 +230,34 @@ function getBreadcrumbItemInfoFromUrl($referer) {
     
 }
 
+
+function getBreadcrumbItemInfoFromObject($object) {
+    global $db, $langs, $conf;
+    
+    $return = array();
+    if(!empty($object) && is_object($object)) {
+        if(method_exists($object, 'getNomUrl')) {
+            
+            $type_element = !empty($object->picto)?$object->picto:$object->element;
+            
+            $getNomUrl = getAttrFromDomElement($object->getNomUrl(), 'a' , false);
+            $return['linkName'] = !empty($getNomUrl) ? $getNomUrl[0] : $object->ref;
+            $return['linkName'] = img_object('', $type_element).(!empty($return['linkName'])?$return['linkName']:'');
+            
+            // get tooltip info from std getNomUrl
+            if(!empty($conf->global->BREADCRUMB_TOOLTIPS)){
+                $getNomUrl = getAttrFromDomElement($object->getNomUrl());
+                if(!empty($getNomUrl)){
+                    $return['linkTooltip'] = (!empty($return['linkTooltip'])?$return['linkTooltip'].'<br/>':'').dol_html_entity_decode($getNomUrl[0],ENT_QUOTES);
+                }
+            }
+        }
+    }
+    
+    return $return;
+    
+}
+
 function getObjectThirdpartyForTooltip($object, $force_thirdparty_id=0)
 {
     if(!is_object($object)){
@@ -251,14 +279,14 @@ function getObjectThirdpartyForTooltip($object, $force_thirdparty_id=0)
 }
 
 
-function getAttrFromDomElement($html, $targetElement = 'a' , $attr = 'title', $returnFirstOnly = 1 )
+function getAttrFromDomElement($html, $targetElement = 'a' , $attr = 'title', $returnFirstOnly = 1 , $xmlEncoding = '<?xml encoding="utf-8" ?>')
 {
     //Create a new DOM document
     $dom = new DOMDocument;
     $return = array();
     //Parse the HTML. The @ is used to suppress any parsing errors
     //that will be thrown if the $html string isn't valid XHTML.
-    @$dom->loadHTML($html);
+    @$dom->loadHTML($xmlEncoding.$html);
     
     //Get all links. You could also use any other tag name here,
     //like 'img' or 'table', to extract other tags.
@@ -267,16 +295,56 @@ function getAttrFromDomElement($html, $targetElement = 'a' , $attr = 'title', $r
     if(!empty($elems))
     {
         //Iterate over the extracted links and display their URLs
+        $i = 0;
         foreach ($elems as $elem){
             //Extract and show the "href" attribute.
-            $return[] = $elem->getAttribute($attr);
+            if(empty($attr)){
+                $return[$i] = $elem->textContent;
+            }
+            else {
+                $return[$i] = $elem->getAttribute($attr);
+            }
             if($returnFirstOnly){
                 break;
             }
+            $i++;
         }
     }
     
     return $return;
 }
 
+/**
+ *	\file		lib/mymodule.lib.php
+ *	\ingroup	mymodule
+ *	\brief		This file is an example module library
+ *				Put some comments here
+ */
+function breadcrumbAdminPrepareHead()
+{
+    global $langs, $conf;
+    $langs->load("breadcrumb@breadcrumb");
+    $h = 0;
+    $head = array();
+    $head[$h][0] = dol_buildpath("/breadcrumb/admin/breadcrumb_setup.php", 1);
+    $head[$h][1] = $langs->trans("Parameters");
+    $head[$h][2] = 'settings';
+    $h++;
 
+    complete_head_from_modules($conf, $langs, $object, $head, $h, 'breadcrumb');
+    return $head;
+}
+
+function breadcrumbNbElementToShow()
+{
+    global $conf;
+    if (!empty($conf->global->BREADCRUMB_NB_ELEMENT)) $nb_element_to_show=$conf->global->BREADCRUMB_NB_ELEMENT;
+    else $nb_element_to_show = 10;
+    
+    return $nb_element_to_show;
+}
+
+function breadcrumbCurrentUrl()
+{
+    return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+}

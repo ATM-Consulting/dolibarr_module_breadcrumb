@@ -45,19 +45,28 @@ class ActionsBreadcrumb
                 
                  $linkName = '';
                  $linkTooltip = '';
-                 $item = getBreadcrumbItemInfoFromUrl($_SERVER['REQUEST_URI']);
+                 $item = getBreadcrumbItemInfoFromObject($object);
+                 $TSessionToolTip =& $_SESSION[$cookiename];
+                 
+                 if(empty($item)){
+                     // Fall back for old Dolibarr versions
+                     $item = getBreadcrumbItemInfoFromUrl($_SERVER['REQUEST_URI']);
+                 }
+                 
                  if(!empty($item)){
                      $linkName = $item['linkName'];
                      
                      if(!empty($item['linkTooltip'])){
                          $linkTooltip = $item['linkTooltip'];
+                         
+                         // Tooltips are stored in session due to cookies size limit
+                         $TSessionToolTip[breadcrumbCurrentUrl()] = $item['linkTooltip'];
                      }
                  }
 
                 ?><script type="text/javascript" >
                     var titre = "<?php echo addslashes($linkName) ?>";
                     var TCookie = new Array;
-					var linktooltip = <?php echo json_encode(str_replace(array("\n", "\r"), '',  $linkTooltip) ) ?>;
                     var url = document.location.href;
                     var fullurl='';
 
@@ -68,8 +77,7 @@ class ActionsBreadcrumb
                             $TToPush = array(
                                 json_encode($row[0]),
                                 json_encode($row[1]),
-                                json_encode($row[2]),
-                                json_encode(!empty($row[3])?$row[3]:'') // to prevent update error
+                                json_encode($row[2])
                             );
                             
                             if(!empty($row[0])) {
@@ -89,7 +97,7 @@ class ActionsBreadcrumb
                             };
                         }
 
-                        TCookie.push([titre, url, fullurl, linktooltip]);
+                        TCookie.push([titre, url, fullurl]);
                         $.cookie("<?php echo $cookiename?>",  JSON.stringify(TCookie) , { path: '/', expires: 1 });
 
                     }
