@@ -1,2 +1,7 @@
-ModuleXXXXXXName = Name
-ModuleXXXXXXDesc = Descripion
+Module100000Name = Fil d'Ariane
+Module100000Desc = Descripion
+NeedAbricotOrUpdateAbricot=Cette Page d'administration nécessite le module Abricot à jour.
+BreadcrumbSetup=Configuration du module Breadcrumb (Fil d'Ariane)
+
+# CONF 
+BREADCRUMB_TOOLTIPS=Permettre l'utilisation de bulles d'informations sur les éléments du fil d'Ariane

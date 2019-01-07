@@ -40,14 +40,33 @@ class ActionsBreadcrumb
             if(empty($TCookie)){
                 $TCookie = array();
             }
-
+            
             if(!BCactionInUrl($_SERVER['REQUEST_URI'])) {
-                 $titre = getTitreFromUrl($_SERVER['REQUEST_URI']);
+                
+                 $linkName = '';
+                 $linkTooltip = '';
+                 $item = getBreadcrumbItemInfoFromObject($object);
+                 $TSessionToolTip =& $_SESSION[$cookiename];
+                 
+                 if(empty($item)){
+                     // Fall back for old Dolibarr versions
+                     $item = getBreadcrumbItemInfoFromUrl($_SERVER['REQUEST_URI']);
+                 }
+                 
+                 if(!empty($item)){
+                     $linkName = $item['linkName'];
+                     
+                     if(!empty($item['linkTooltip'])){
+                         $linkTooltip = $item['linkTooltip'];
+                         
+                         // Tooltips are stored in session due to cookies size limit
+                         $TSessionToolTip[breadcrumbCurrentUrl()] = $item['linkTooltip'];
+                     }
+                 }
 
-                ?><script type="text/javascript">
-                    var titre = "<?php echo addslashes($titre) ?>";
+                ?><script type="text/javascript" >
+                    var titre = "<?php echo addslashes($linkName) ?>";
                     var TCookie = new Array;
-
                     var url = document.location.href;
                     var fullurl='';
 
@@ -55,9 +74,15 @@ class ActionsBreadcrumb
 
                         foreach($TCookie as $row) {
 
+                            $TToPush = array(
+                                json_encode($row[0]),
+                                json_encode($row[1]),
+                                json_encode($row[2])
+                            );
+                            
                             if(!empty($row[0])) {
                                 ?>
-                                TCookie.push(["<?php echo addslashes($row[0]) ?>", "<?php echo $row[1] ?>", "<?php echo addslashes($row[2]) ?>"]);
+                                TCookie.push([<?php echo implode(',', $TToPush); ?>]);
                                 <?php
                             }
 

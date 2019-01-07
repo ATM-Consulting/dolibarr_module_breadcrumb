@@ -92,7 +92,7 @@ class modBreadcrumb extends DolibarrModules
 
         // Config pages. Put here list of php pages
         // stored into breadcrumb/admin directory, used to setup module.
-        $this->config_page_url = false;
+        $this->config_page_url = array("breadcrumb_setup.php@breadcrumb");
 
         // Dependencies
         // List of modules id that must be enabled if this module is enabled
