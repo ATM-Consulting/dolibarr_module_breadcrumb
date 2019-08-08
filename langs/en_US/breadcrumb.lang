@@ -1,2 +1,7 @@
-ModuleXXXXXXName = Name
-ModuleXXXXXXDesc = Descripion
+Module100000Name = Breadcrumb
+Module100000Desc = Breadcrumb menu
+NeedAbricotOrUpdateAbricot = This Module needs the Module Abricot to work.
+BreadcrumbSetup = Setup of Module Breadcrumb
+
+# CONF 
+BREADCRUMB_TOOLTIPS = It is used for Breadcrumb menu
