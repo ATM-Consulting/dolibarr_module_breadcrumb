@@ -4,6 +4,8 @@
 
 	if(!empty($_POST)) exit; // no breadcrumb on submit form
 
+	// Fix TK11198 : pour ne pas renouveller le token CSRF à chaque inclusion du main.inc.php et Eviter l'erreur CSRF
+	define('NOTOKENRENEWAL', 1);
 	require('../config.php');
 
 	$referer = $_SERVER['HTTP_REFERER'];
@@ -16,7 +18,7 @@
 	$appli='Dolibarr';
 	if (!empty($conf->global->MAIN_APPLICATION_TITLE)) $appli=$conf->global->MAIN_APPLICATION_TITLE;
 
-	
+
 	$nb_element_to_show = breadcrumbNbElementToShow();
 
     $cookiename = getCookieName();
@@ -35,17 +37,17 @@
 	if(count($TCookie)>$nb_element_to_show) {
 		$TCookie = array_slice($TCookie, count($TCookie) - $nb_element_to_show );
 	}
-	
+
 	// Prepare $TSessionToolTip
 	// Tooltips are stored in session due to cookies size limit
 	if(isset($_SESSION[$cookiename])) {
 	    $TSessionToolTip =& $_SESSION[$cookiename];
 	}
-	
+
 	if(empty($TSessionToolTip)){
 	    $TSessionToolTip = array();
 	}
-	
+
 	if(count($TSessionToolTip)>$nb_element_to_show) {
 	    $TSessionToolTip = array_slice($TSessionToolTip, count($TSessionToolTip) - $nb_element_to_show );
 	}
@@ -62,7 +64,7 @@
 	    $item = getBreadcrumbItemInfoFromUrl($_SERVER['REQUEST_URI']);
 	    if(!empty($item)){
 	        $titre = $item['linkName'];
-	        
+
 	        if(!empty($item['linkTooltip'])){
 	            $linkTooltip = $item['linkTooltip'];
 	            $TSessionToolTip[$_SERVER['REQUEST_URI']] = $item['linkTooltip'];
@@ -124,8 +126,8 @@ $(document).ready(function() {
 			    if(!empty($conf->global->BREADCRUMB_TOOLTIPS) && !empty($TSessionToolTip[$row[1]])){
 			        $toolTipAttr = ' class="breadcrumbTooltip" title="'.dol_escape_htmltag($TSessionToolTip[$row[1]], 1).'" ';
 			    }
-			    
-			    
+
+
 			    if(!empty($row[2])){
 			        $url = '<span'.$toolTipAttr.' >'.$row[0].'</span>';
 			    }
