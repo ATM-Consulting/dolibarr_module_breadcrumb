@@ -75,9 +75,15 @@
 }
 .breadCrumb ul li span
 {
-	display: block;
+	display: inline-block;
 	overflow: hidden;
 }
+
+.breadCrumb ul li span.fa, .breadCrumb ul li span.fas
+{
+	margin-right: 5px;
+}
+
 .breadCrumb ul li a
 {
 	display: block;
