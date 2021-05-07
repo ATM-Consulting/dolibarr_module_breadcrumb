@@ -1,11 +1,10 @@
 <?php
+	if (!defined('NOTOKENRENEWAL')) define('NOTOKENRENEWAL', 1); // Disables token renewal
 
 	header('Content-Type: application/javascript');
 
 	if(!empty($_POST)) exit; // no breadcrumb on submit form
 
-	// Fix TK11198 : pour ne pas renouveller le token CSRF à chaque inclusion du main.inc.php et Eviter l'erreur CSRF
-	define('NOTOKENRENEWAL', 1);
 	require('../config.php');
 
 	$referer = $_SERVER['HTTP_REFERER'];
