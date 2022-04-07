@@ -83,41 +83,30 @@ $page_name = "BreadcrumbSetup";
 llxHeader('', $langs->trans($page_name));
 
 // Subheader
-$linkback = '<a href="' . DOL_URL_ROOT . '/admin/modules.php">'
-    . $langs->trans("BackToModuleList") . '</a>';
+$linkback = '<a href="'.DOL_URL_ROOT.'/admin/modules.php">'.$langs->trans("BackToModuleList").'</a>';
 print_fiche_titre($langs->trans($page_name), $linkback);
 
 // Configuration header
 $head = breadcrumbAdminPrepareHead();
-dol_fiche_head(
-    $head,
-    'settings',
-    $langs->trans("Module100000Name"),
-    0,
-    "breadcrumb@breadcrumb"
-);
-
+print dol_get_fiche_head($head, 'settings', 1, -1, "breadcrumb@breadcrumb" );
 
 if(!function_exists('setup_print_title')){
     print '<div class="error" >'.$langs->trans('NeedAbricotOrUpdateAbricot').'</div>';
-}
-else{
+} else {
+	// Setup page goes here
+	$form=new Form($db);
+	$var=false;
+	print '<table class="noborder centpercent">';
+
+	setup_print_title("Parameters");
+
+	// Example with a yes / no select
+	setup_print_on_off('BREADCRUMB_TOOLTIPS');
+
+	setup_print_input_form_part('BREADCRUMB_NB_ELEMENT');
 
 
-// Setup page goes here
-$form=new Form($db);
-$var=false;
-print '<table class="noborder" width="100%">';
-
-
-setup_print_title("Parameters");
-
-// Example with a yes / no select
-setup_print_on_off('BREADCRUMB_TOOLTIPS');
-
-
-
-print '</table>';
+	print '</table>';
 
 } // end function_exists('setup_print_title')
 

@@ -5,3 +5,4 @@ BreadcrumbSetup=Configuration du module Breadcrumb (Fil d'Ariane)
 
 # CONF 
 BREADCRUMB_TOOLTIPS=Permettre l'utilisation de bulles d'informations sur les éléments du fil d'Ariane
+BREADCRUMB_NB_ELEMENT=Nombre d'élements affiché
