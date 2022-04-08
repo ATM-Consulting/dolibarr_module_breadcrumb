@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 - 
 
 ## 1.3
-
+- FIX : Do not display breadcrumb on public pages *08/04/2022* - 1.3.4
 - FIX : Separation des fils d'Ariane par entité *18/11/2021* - 1.3.3
 - FIX : V13 COMPATIBILITY GETPOST [2020-03-12]
 
