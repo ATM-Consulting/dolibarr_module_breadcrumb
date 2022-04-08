@@ -11,7 +11,9 @@
 	if (strpos($referer, 'optioncss=print') !== false ) {
 		exit;
 	}
-
+	
+	$publicpage = strpos($referer, '/public/');
+	if($publicpage !== false) exit;
     dol_include_once('/breadcrumb/lib/breadcrumb.lib.php');
 
 	$appli='Dolibarr';

@@ -343,8 +343,12 @@ function breadcrumbAdminPrepareHead()
 function breadcrumbNbElementToShow()
 {
     global $conf;
-    if (!empty($conf->global->BREADCRUMB_NB_ELEMENT)) $nb_element_to_show=$conf->global->BREADCRUMB_NB_ELEMENT;
-    else $nb_element_to_show = 10;
+
+    if (!empty($conf->global->BREADCRUMB_NB_ELEMENT)) {
+        $nb_element_to_show=$conf->global->BREADCRUMB_NB_ELEMENT;
+    } else {
+        $nb_element_to_show = 10;
+    }
 
     return $nb_element_to_show;
 }
