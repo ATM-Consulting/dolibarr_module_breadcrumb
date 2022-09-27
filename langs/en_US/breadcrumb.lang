@@ -5,4 +5,4 @@ BreadcrumbSetup = Setup of Module Breadcrumb
 
 # CONF 
 BREADCRUMB_TOOLTIPS = It is used for Breadcrumb menu
-BREADCRUMB_NB_ELEMENT=Number élements display
+BREADCRUMB_NB_ELEMENT = Number of elements displayed
